@@ -22,12 +22,36 @@ program
     // 检查 node 版本
     checkNodeVersion(cliPackage.engines.node, cliPackage.name);
 
+    fse.readFile(
+      path.join(__dirname, "../../src/copy-content/prettier.js"),
+      (err, data) => {
+        if (err) throw "prettier 配置文件写入失败";
+        const perttierPath = path.join(filepath, "/.prettierrc.cjs");
+        fse.writeFile(perttierPath, data);
+      }
+    );
+
+    // fse.readFile(
+    //   path.join(__dirname, "../../src/copy-content/commitlint.js"),
+    //   (err, data) => {
+    //     if (err) throw "commitlintrc 配置文件写入失败";
+    //     const perttierPath = path.join(filepath, "/.commitlintrc.cjs");
+    //     fse.writeFile(perttierPath, data);
+    //   }
+    // );
+    const perttierPath = path.join(filepath, "/.commitlintrc.cjs");
+    fse.copyFile(
+      path.join(__dirname, "../../src/copy-content/commitlint.js"),
+      perttierPath,
+      (err) => {
+        if (err) {
+          console.log(chalk.red("commitlint 配置失败"));
+        }
+      }
+    );
+
     // const packagePath = path.join(filepath, "/package.json");
     // const targetPackage = await readJSON(packagePath);
-
-    // fse.writeFile(path.join(filepath, ))
-
-    console.log(result);
   });
 program.parse(process.argv);
 
